@@ -1,15 +1,23 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, User, Search, X } from "lucide-react";
 import { clsx } from "clsx";
 
 const Navbar = () => {
+  const searchRef = useRef<HTMLInputElement>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const links = [
     { id: 1, label: "Login", toPath: "/login" },
     { id: 2, label: "Register", toPath: "/register" },
   ];
+
+  const focusInput = () => {
+    setIsMenuOpen(true);
+    if (searchRef.current !== null) {
+      searchRef.current.focus();
+    }
+  };
 
   return (
     <>
@@ -21,7 +29,7 @@ const Navbar = () => {
               className="cursor-pointer lg:hidden"
               onClick={() => setIsMenuOpen(true)}
             />
-            <Link to="/" className="font-mono text-4xl">
+            <Link to="/" className="font-mono  text-2xl md:text-4xl">
               ReactGram
             </Link>
           </div>
@@ -43,18 +51,29 @@ const Navbar = () => {
             isMenuOpen && "translate-x-0 "
           )}
         >
-          <div className="text-black bg-white flex-col absolute left-0 top-0 h-screen p-8 gap-8 z-50 flex w-56">
+          <div className="text-black bg-white flex-col absolute left-0 top-0 h-screen p-8 gap-8 z-50 flex w-94">
             <X
               size={32}
               className="mt-0 mb-8 cursor-pointer"
               onClick={() => setIsMenuOpen(false)}
             />
-
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Pesquisar..."
+                ref={searchRef}
+                className="pl-10 py-2 pr-4 rounded-full border border-gray-300 focus:border-blue-500 focus:outline-none "
+              />
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Search />
+              </div>
+            </div>
             {links.map((link) => (
               <Link
                 key={link.id}
                 to={link.toPath}
                 className="font-bold text-xl"
+                onClick={() => setIsMenuOpen(false)}
               >
                 {link.label}
               </Link>
@@ -63,7 +82,17 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center gap-4">
-          <Search size={32} />
+          <Search size={32} className="lg:hidden" onClick={focusInput} />
+          <div className="relative hidden lg:block">
+            <input
+              type="text"
+              placeholder="Pesquisar..."
+              className="pl-10 py-2 pr-4 rounded-full border border-gray-300 focus:border-blue-500 focus:outline-none "
+            />
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <Search />
+            </div>
+          </div>
           <User size={32} />
         </div>
       </nav>
