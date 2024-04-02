@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const formSchema = z
   .object({
@@ -47,7 +48,7 @@ const Register = () => {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    const user = values;
   }
 
   return (
@@ -62,7 +63,10 @@ const Register = () => {
             <p className="text-lg mt-4">Criar sua conta</p>
           </div>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="border p-4 shadow-lg  space-y-6"
+            >
               <FormField
                 control={form.control}
                 name="name"
@@ -131,6 +135,15 @@ const Register = () => {
                   </FormItem>
                 )}
               />
+              <p>
+                Já tem conta?{" "}
+                <Link
+                  to={"/login"}
+                  className="underline text-sky-800 font-bold"
+                >
+                  Entre aqui
+                </Link>
+              </p>
               <Button type="submit" className="mt-8">
                 Cadastrar
               </Button>
@@ -140,7 +153,7 @@ const Register = () => {
       </div>
 
       <div className=" hidden md:flex items-center justify-center">
-        <img src={cameraSVG} alt="Camera" className="w-full h-3/4" />
+        <img src={cameraSVG} alt="Camera" className="w-full max-h-[500px]" />
       </div>
     </div>
   );
