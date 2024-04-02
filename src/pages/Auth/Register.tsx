@@ -19,6 +19,13 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
+import { register, reset } from "@/slices/authSlice";
+
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store";
+import { RegisterData } from "@/utils/interfaces";
+import { UnknownAction } from "@reduxjs/toolkit";
+
 const formSchema = z
   .object({
     email: z.string().email({ message: "Digite um email válido" }),
@@ -47,9 +54,17 @@ const Register = () => {
     },
   });
 
+  const dispatch = useDispatch();
+  const { loading, error } = useSelector((state: RootState) => state.auth);
+
   function onSubmit(values: z.infer<typeof formSchema>) {
-    const user = values;
+    const user: RegisterData = values;
+    dispatch(register(user) as unknown as UnknownAction);
   }
+
+  useEffect(() => {
+    dispatch(reset());
+  }, [dispatch]);
 
   return (
     <div className="md:grid grid-cols-2 px-8">

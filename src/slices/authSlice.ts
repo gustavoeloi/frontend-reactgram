@@ -4,9 +4,9 @@ import { RegisterData } from "@/utils/interfaces";
 
 interface initialState {
   user: RegisterData | null;
-  error: boolean | any;
-  sucess: boolean | any;
-  loading: boolean | any;
+  error: boolean | string;
+  sucess: boolean | string;
+  loading: boolean | string;
 }
 
 const userString = localStorage.getItem("user");
@@ -62,7 +62,7 @@ export const authSlice = createSlice({
       })
       .addCase(register.rejected, (state, action) => {
         (state.loading = false),
-          (state.error = action.payload),
+          (state.error = action.payload as string),
           (state.user = null);
       });
   },
