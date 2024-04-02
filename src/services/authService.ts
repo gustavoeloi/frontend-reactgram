@@ -1,11 +1,6 @@
 import { requestConfig, api } from "./../utils/config";
 
-interface RegisterData {
-  name: string;
-  email: string;
-  password: string;
-  confirmpassword: string;
-}
+import { RegisterData } from "@/utils/interfaces";
 
 // Register User
 const register = async (data: RegisterData) => {
@@ -19,6 +14,8 @@ const register = async (data: RegisterData) => {
     if (res) {
       localStorage.setItem("user", JSON.stringify(res));
     }
+
+    return res;
   } catch (error) {
     console.log(error);
   }
