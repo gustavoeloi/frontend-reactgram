@@ -1,16 +1,35 @@
-import { useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { Menu, User, Search, X } from "lucide-react";
 import { clsx } from "clsx";
+
+//hooks
+import { useAuth } from "@/hooks/useAuth";
+import { useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { RootState } from "@/store";
 
 const Navbar = () => {
   const searchRef = useRef<HTMLInputElement>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const links = [
-    { id: 1, label: "Login", toPath: "/login" },
-    { id: 2, label: "Register", toPath: "/register" },
-  ];
+  const { auth } = useAuth();
+  const { user } = useSelector((state: RootState) => state.auth);
+
+  console.log(user);
+
+  const links = [];
+
+  if (!auth) {
+    links.push({ id: 1, label: "Login", toPath: "/login" });
+    links.push({ id: 2, label: "Register", toPath: "/register" });
+  }
+
+  if (auth) {
+    links.push({ id: 3, label: "Home", toPath: "/home" });
+    links.push({ id: 4, label: "Profile", toPath: `/users/${user?._id}` });
+    links.push({ id: 5, label: "Logout", toPath: "/logout" });
+  }
 
   const focusInput = () => {
     setIsMenuOpen(true);
@@ -24,11 +43,15 @@ const Navbar = () => {
       <nav className="flex justify-between px-8 items-center py-6">
         <div className="flex items-center gap-8">
           <div className="flex items-center gap-4">
-            <Menu
-              size={32}
-              className="cursor-pointer lg:hidden"
-              onClick={() => setIsMenuOpen(true)}
-            />
+            {auth ? (
+              <Link to={`/users/${user?._id}`} className="cursor-pointer">
+                <Menu
+                  size={32}
+                  className="cursor-pointer lg:hidden"
+                  onClick={() => setIsMenuOpen(true)}
+                />
+              </Link>
+            ) : null}
             <Link to="/" className="font-mono  text-2xl md:text-4xl">
               ReactGram
             </Link>
@@ -93,7 +116,15 @@ const Navbar = () => {
               <Search />
             </div>
           </div>
-          <User size={32} />
+          {auth ? (
+            <Link to={`/users/${user?._id}`} className="cursor-pointer">
+              <Menu
+                size={32}
+                className="cursor-pointer lg:hidden"
+                onClick={() => setIsMenuOpen(true)}
+              />
+            </Link>
+          ) : null}
         </div>
       </nav>
       <hr />

@@ -3,4 +3,5 @@ export interface RegisterData {
   email: string;
   password: string;
   confirmpassword: string;
+  _id?: string;
 }
