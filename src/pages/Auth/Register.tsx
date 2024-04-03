@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import cameraSVG from "@/assets/camera-svg.svg";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useToast } from "@/components/ui/use-toast";
 
 //shadcn
 import {
@@ -54,6 +55,8 @@ const Register = () => {
     },
   });
 
+  const { toast } = useToast();
+
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state: RootState) => state.auth);
 
@@ -70,17 +73,10 @@ const Register = () => {
     <div className="md:grid grid-cols-2 px-8">
       <div className="">
         <div>
-          <div className="mt-16 mb-6">
-            <h2 className="font-medium text-xl">
-              Junte-se a nós. Transforme momentos em memórias compartilhadas,
-              busque inspiração no nosso mundo e celebre a vida.
-            </h2>
-            <p className="text-lg mt-4">Criar sua conta</p>
-          </div>
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="border p-4 shadow-lg  space-y-6"
+              className="border p-4 shadow-lg space-y-6 mt-12 w-full max-w-md mx-auto"
             >
               <FormField
                 control={form.control}
@@ -159,15 +155,32 @@ const Register = () => {
                   Entre aqui
                 </Link>
               </p>
-              <Button type="submit" className="mt-8">
-                Cadastrar
-              </Button>
+              {error && (
+                <p className="py-2 px-1 rounded bg-red-100 border border-red-200 text-red-500 font-bold">
+                  {error}
+                </p>
+              )}
+
+              {!loading ? (
+                <Button type="submit" className="mt-8">
+                  Cadastrar
+                </Button>
+              ) : (
+                <Button type="submit" className="mt-8" disabled />
+              )}
             </form>
           </Form>
         </div>
       </div>
 
-      <div className=" hidden md:flex items-center justify-center">
+      <div className="hidden md:flex md:flex-col ml-8 md:ml-0">
+        <div className="mt-16 mb-6">
+          <p className="text-xl mt-4 font-bold">Criar sua conta</p>
+          <h2 className="font-medium text-xl">
+            Junte-se a nós. Transforme momentos em memórias compartilhadas,
+            busque inspiração no nosso mundo e celebre a vida.
+          </h2>
+        </div>
         <img src={cameraSVG} alt="Camera" className="w-full max-h-[500px]" />
       </div>
     </div>
