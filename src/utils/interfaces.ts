@@ -5,3 +5,9 @@ export interface RegisterData {
   confirmpassword: string;
   _id?: string;
 }
+
+export interface LoginData {
+  email: string;
+  password: string;
+  _id?: string;
+}

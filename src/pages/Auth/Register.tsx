@@ -156,7 +156,7 @@ const Register = () => {
                 </Link>
               </p>
               {error && (
-                <p className="py-2 px-1 rounded bg-red-100 border border-red-200 text-red-500 font-bold">
+                <p className="py-2 px-1 rounded bg-red-100 border border-red-200 text-red-500 font-medium text-center">
                   {error}
                 </p>
               )}

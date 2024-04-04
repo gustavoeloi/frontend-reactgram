@@ -12,12 +12,21 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
+import { login, reset } from "@/slices/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store";
+import { UnknownAction } from "@reduxjs/toolkit";
+import { useEffect } from "react";
+
 const formSchema = z.object({
   email: z.string().email(),
   password: z.string(),
 });
 
 const Login = () => {
+  const dispath = useDispatch();
+  const { loading, error } = useSelector((state: RootState) => state.auth);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -27,8 +36,14 @@ const Login = () => {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    const user = values;
+
+    dispath(login(user) as unknown as UnknownAction);
   }
+
+  useEffect(() => {
+    dispath(reset());
+  }, [dispath]);
 
   return (
     <div className="container mx-auto p-8 flex items-center justify-center">
@@ -72,7 +87,19 @@ const Login = () => {
                 </FormItem>
               )}
             />
-            <Button className="py-3 px-6  text-white rounded-lg ">Login</Button>
+            {error && (
+              <p className="py-2 px-1 rounded bg-red-100 border border-red-200 text-red-500 font-medium text-center">
+                {error}
+              </p>
+            )}
+
+            {!loading ? (
+              <Button type="submit" className="mt-8">
+                Login
+              </Button>
+            ) : (
+              <Button type="submit" className="mt-8" disabled />
+            )}
             <p className="text-center">
               Não possui conta?{" "}
               <Link to={"/register"} className="underline text-blue-600">

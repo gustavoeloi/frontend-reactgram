@@ -29,7 +29,6 @@ const Navbar = () => {
   if (auth) {
     links.push({ id: 3, label: "Home", toPath: "/home" });
     links.push({ id: 4, label: "Profile", toPath: `/users/${user?._id}` });
-    links.push({ id: 5, label: "Logout", toPath: "/logout" });
   }
 
   const focusInput = () => {
