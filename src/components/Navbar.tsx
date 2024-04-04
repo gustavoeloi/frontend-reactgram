@@ -8,6 +8,7 @@ import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "@/store";
+import NavbarProfile from "./NavbarProfile";
 
 const Navbar = () => {
   const searchRef = useRef<HTMLInputElement>(null);
@@ -116,15 +117,7 @@ const Navbar = () => {
               <Search />
             </div>
           </div>
-          {auth ? (
-            <Link to={`/users/${user?._id}`} className="cursor-pointer">
-              <Menu
-                size={32}
-                className="cursor-pointer lg:hidden"
-                onClick={() => setIsMenuOpen(true)}
-              />
-            </Link>
-          ) : null}
+          {auth && <NavbarProfile />}
         </div>
       </nav>
       <hr />

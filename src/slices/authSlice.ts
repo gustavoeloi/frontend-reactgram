@@ -41,29 +41,42 @@ export const register = createAsyncThunk(
   }
 );
 
+export const logout = createAsyncThunk("auth/logout", async () => {
+  await authService.logout();
+});
+
 export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
     reset: (state) => {
-      (state.loading = false), (state.error = false), (state.sucess = false);
+      state.loading = false;
+      state.error = false;
+      state.sucess = false;
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(register.pending, (state) => {
-        (state.loading = true), (state.error = false);
+        state.loading = true;
+        state.error = false;
       })
       .addCase(register.fulfilled, (state, action) => {
-        (state.loading = false),
-          (state.sucess = true),
-          (state.error = false),
-          (state.user = action.payload);
+        state.loading = false;
+        state.sucess = true;
+        state.error = false;
+        state.user = action.payload;
       })
       .addCase(register.rejected, (state, action) => {
-        (state.loading = false),
-          (state.error = action.payload as string),
-          (state.user = null);
+        state.loading = false;
+        state.error = action.payload as string;
+        state.user = null;
+      })
+      .addCase(logout.fulfilled, (state, action) => {
+        state.loading = false;
+        state.sucess = true;
+        state.error = false;
+        state.user = null;
       });
   },
 });
