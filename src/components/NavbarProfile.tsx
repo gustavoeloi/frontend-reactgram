@@ -16,9 +16,20 @@ import { useNavigate } from "react-router-dom";
 import { logout, reset } from "@/slices/authSlice";
 import { useDispatch } from "react-redux";
 import { UnknownAction } from "@reduxjs/toolkit";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "./ui/alert-dialog";
 
 const NavbarProfile = () => {
-  const { navigate } = useNavigate();
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
 
@@ -38,9 +49,11 @@ const NavbarProfile = () => {
         <DropdownMenuLabel>Configurações</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>Ver perfil</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => navigate("/users/")}>
+            Ver perfil
+          </DropdownMenuItem>
           <DropdownMenuItem>Fazer Post</DropdownMenuItem>
-          <DropdownMenuItem></DropdownMenuItem>
+
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={handleLogout}>
             Sair
