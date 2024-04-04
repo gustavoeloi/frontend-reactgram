@@ -1,6 +1,6 @@
 import { requestConfig, api } from "./../utils/config";
 
-import { RegisterData } from "@/utils/interfaces";
+import { LoginData, RegisterData } from "@/utils/interfaces";
 
 // Register User
 const register = async (data: RegisterData) => {
@@ -11,7 +11,7 @@ const register = async (data: RegisterData) => {
       .then((res) => res.json())
       .catch((err) => console.log(err));
 
-    if (res) {
+    if (res._id) {
       localStorage.setItem("user", JSON.stringify(res));
     }
 
@@ -25,7 +25,7 @@ const logout = async () => {
   localStorage.removeItem("user");
 };
 
-const login = async (data) => {
+const login = async (data: LoginData) => {
   const config = requestConfig("POST", data);
 
   try {
@@ -33,7 +33,7 @@ const login = async (data) => {
       .then((res) => res.json())
       .catch((err) => console.log(err));
 
-    if (res) {
+    if (res._id) {
       localStorage.setItem("user", JSON.stringify(res));
     }
 
