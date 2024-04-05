@@ -98,7 +98,9 @@ const Login = () => {
                 Login
               </Button>
             ) : (
-              <Button type="submit" className="mt-8" disabled />
+              <Button type="submit" className="mt-8" disabled>
+                Entrando...
+              </Button>
             )}
             <p className="text-center">
               Não possui conta?{" "}

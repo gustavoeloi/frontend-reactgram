@@ -9,7 +9,7 @@ import {
   DropdownMenuShortcut,
 } from "./ui/dropdown-menu";
 
-import { LogOut, User } from "lucide-react";
+import { LogOut, User, PenLine } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 //Redux
@@ -49,16 +49,29 @@ const NavbarProfile = () => {
         <DropdownMenuLabel>Configurações</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem onClick={() => navigate("/users/")}>
+          <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={() => navigate("/users/")}
+          >
             Ver perfil
           </DropdownMenuItem>
-          <DropdownMenuItem>Fazer Post</DropdownMenuItem>
-
+          <DropdownMenuItem className="cursor-pointer">
+            Fazer Post
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={() => navigate("/profile")}
+          >
+            Atualizar Perfil
+            <DropdownMenuShortcut>
+              <PenLine size={20} />
+            </DropdownMenuShortcut>
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={handleLogout}>
+          <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
             Sair
             <DropdownMenuShortcut>
-              <LogOut />
+              <LogOut size={20} />
             </DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuGroup>

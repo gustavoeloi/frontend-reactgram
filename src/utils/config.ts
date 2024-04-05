@@ -1,4 +1,4 @@
-type HttpMethod = "GET" | "POST" | "PUST" | "DELETE";
+type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
 type RequestData = Record<string, any> | null;
 type Token = string | null;
 type ImageData = FormData | null;
@@ -10,13 +10,13 @@ interface RequestConfig {
 }
 
 export const api = "http://localhost:5000/api";
-export const upload = "http://localhost:5000/uploados";
+export const upload = "http://localhost:5000/uploads";
 
 export const requestConfig = (
-  method,
+  method: HttpMethod,
   data,
-  token = null,
-  image = null
+  token: Token = null,
+  image: boolean = false
 ): RequestConfig => {
   let config: RequestConfig;
 

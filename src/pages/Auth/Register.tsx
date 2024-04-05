@@ -60,14 +60,14 @@ const Register = () => {
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state: RootState) => state.auth);
 
+  useEffect(() => {
+    dispatch(reset());
+  }, [dispatch]);
+
   function onSubmit(values: z.infer<typeof formSchema>) {
     const user: RegisterData = values;
     dispatch(register(user) as unknown as UnknownAction);
   }
-
-  useEffect(() => {
-    dispatch(reset());
-  }, [dispatch]);
 
   return (
     <div className="md:grid grid-cols-2 px-8">
@@ -166,7 +166,9 @@ const Register = () => {
                   Cadastrar
                 </Button>
               ) : (
-                <Button type="submit" className="mt-8" disabled />
+                <Button type="submit" className="mt-8" disabled>
+                  Cadastrando...
+                </Button>
               )}
             </form>
           </Form>

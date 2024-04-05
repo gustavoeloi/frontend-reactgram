@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,23 +23,76 @@ const formSchema = z.object({
   password: z.string(),
 });
 
+import { useEffect } from "react";
+import { UseSelector, useDispatch, useSelector } from "react-redux";
+
+import { profile, resetMessage } from "@/slices/userSlice";
+import { RootState } from "@/store";
+import { UnknownAction } from "@reduxjs/toolkit";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { upload } from "@/utils/config";
+
 const EditProfile = () => {
+  const dispatch = useDispatch();
+  const [previewImage, setPreviewImage] = useState();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      email: "",
       profileImage: "",
       bio: "",
       password: "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    const updateValues = values;
+  const { user, message, error, loading } = useSelector(
+    (state: RootState) => state.user
+  );
 
-    console.log(updateValues);
+  useEffect(() => {
+    dispatch(profile() as unknown as UnknownAction);
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (user) {
+      form.setValue("name", user.name || "");
+      form.setValue("email", user.email || "");
+      form.setValue("bio", user.bio || "");
+    }
+  }, [user, form]);
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    const data: Partial<z.infer<typeof formSchema>> = {
+      name: values.name,
+    };
+
+    if (values.bio) {
+      data.bio = values.bio;
+    }
+
+    if (values.profileImage) {
+      data.profileImage = values.profileImage;
+    }
+
+    if (values.password) {
+      data.password = values.password;
+    }
+
+    const formData = new FormData();
+
+    // Adicionando cada propriedade ao objeto formData
+    Object.keys(data).forEach((key) => formData.append(key, data[key]!)); // Usando '!' para indicar que sabemos que a chave existe
+
+    // Agora formData contém os dados que você deseja enviar
   }
+
+  const handleFile = (e) => {
+    //image preview
+    const image = e.target.files[0];
+
+    setPreviewImage(image);
+  };
 
   return (
     <div className="mx-auto max-w-lg my-8 border rounded-sm py-6 px-8 ">
@@ -47,6 +100,21 @@ const EditProfile = () => {
       <p className="text-slate-400">
         Deixe seu perfil mais completo e adicione uma imagem e uma biografia
       </p>
+      {(user?.profileImage || previewImage) && (
+        <Avatar className="h-32 w-32 mx-auto mt-8">
+          <AvatarImage
+            src={
+              previewImage
+                ? URL.createObjectURL(previewImage)
+                : `${upload}/users/${user?.profileImage}`
+            }
+            className=""
+            sizes="lg"
+            alt="User Icon"
+          />
+          <AvatarFallback>{user?.name.charAt(0).toUpperCase()}</AvatarFallback>
+        </Avatar>
+      )}
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -79,6 +147,7 @@ const EditProfile = () => {
                     placeholder=""
                     {...field}
                     className="py-3 px-4 rounded-lg border w-full"
+                    disabled
                   />
                 </FormControl>
               </FormItem>
@@ -94,7 +163,7 @@ const EditProfile = () => {
                   <span className="text-sm text-gray-500">(PNG ou JPG)</span>
                 </FormLabel>
                 <FormControl>
-                  <Input type="file" {...field} />
+                  <Input type="file" {...field} onChange={handleFile} />
                 </FormControl>
               </FormItem>
             )}
@@ -117,7 +186,7 @@ const EditProfile = () => {
           />
           <FormField
             control={form.control}
-            name="email"
+            name="password"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
@@ -138,7 +207,23 @@ const EditProfile = () => {
             )}
           />
 
-          <Button type="submit">Atualizar</Button>
+          {error && (
+            <p className="py-2 px-1 rounded bg-red-100 border border-red-200 text-red-500 font-medium text-center">
+              {error}
+            </p>
+          )}
+
+          {message && <p>{message}</p>}
+
+          {!loading ? (
+            <Button type="submit" className="mt-8">
+              Atualizar
+            </Button>
+          ) : (
+            <Button type="submit" className="mt-8" disabled>
+              Atualizando...
+            </Button>
+          )}
         </form>
       </Form>
     </div>
