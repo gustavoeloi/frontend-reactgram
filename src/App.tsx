@@ -6,6 +6,7 @@ import Navbar from "./components/Navbar";
 
 //pages
 import Home from "@/pages/Home";
+import EditProfile from "./pages/EditProfile";
 
 import Register from "./pages/Auth/Register";
 import Login from "./pages/Auth/Login";
@@ -33,6 +34,10 @@ function App() {
         <Route
           path="/register"
           element={!auth ? <Register /> : <Navigate to={"/home"} />}
+        />
+        <Route
+          path="/profile"
+          element={auth ? <EditProfile /> : <Navigate to={"/login"} />}
         />
       </Routes>
     </>
