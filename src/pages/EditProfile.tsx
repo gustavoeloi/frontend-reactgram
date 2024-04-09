@@ -26,7 +26,7 @@ const formSchema = z.object({
 import { useEffect } from "react";
 import { UseSelector, useDispatch, useSelector } from "react-redux";
 
-import { profile, resetMessage } from "@/slices/userSlice";
+import { profile, resetMessage, updateProfile } from "@/slices/userSlice";
 import { RootState } from "@/store";
 import { UnknownAction } from "@reduxjs/toolkit";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -62,8 +62,8 @@ const EditProfile = () => {
     }
   }, [user, form]);
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    const data: Partial<z.infer<typeof formSchema>> = {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const data: Record<string, any> = {
       name: values.name,
     };
 
@@ -81,10 +81,15 @@ const EditProfile = () => {
 
     const formData = new FormData();
 
-    // Adicionando cada propriedade ao objeto formData
-    Object.keys(data).forEach((key) => formData.append(key, data[key]!)); // Usando '!' para indicar que sabemos que a chave existe
+    for (const key in data) {
+      formData.append(key, data[key]);
+    }
 
-    // Agora formData contém os dados que você deseja enviar
+    await dispatch(updateProfile(formData) as unknown as UnknownAction);
+
+    setTimeout(() => {
+      dispatch(resetMessage());
+    }, 2000);
   }
 
   const handleFile = (e) => {
@@ -100,6 +105,7 @@ const EditProfile = () => {
       <p className="text-slate-400">
         Deixe seu perfil mais completo e adicione uma imagem e uma biografia
       </p>
+
       {(user?.profileImage || previewImage) && (
         <Avatar className="h-32 w-32 mx-auto mt-8">
           <AvatarImage
@@ -112,7 +118,7 @@ const EditProfile = () => {
             sizes="lg"
             alt="User Icon"
           />
-          <AvatarFallback>{user?.name.charAt(0).toUpperCase()}</AvatarFallback>
+          {/* <AvatarFallback>{user?.name.charAt(0).toUpperCase()}</AvatarFallback> */}
         </Avatar>
       )}
       <Form {...form}>
@@ -213,7 +219,11 @@ const EditProfile = () => {
             </p>
           )}
 
-          {message && <p>{message}</p>}
+          {message && (
+            <p className="py-2 px-1 rounded bg-green-100 border border-green-400 text-green-500 font-medium text-center">
+              {message}
+            </p>
+          )}
 
           {!loading ? (
             <Button type="submit" className="mt-8">

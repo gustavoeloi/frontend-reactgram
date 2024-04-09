@@ -21,7 +21,7 @@ const initialState: initialState = {
 
 export const profile = createAsyncThunk(
   "user/profile",
-  async (user, thunkAPI) => {
+  async (user: User, thunkAPI) => {
     const state = thunkAPI.getState() as RootState; // Especificando o tipo de estado como RootState
     const token = state.auth?.user?.token ?? "";
 
@@ -33,8 +33,8 @@ export const profile = createAsyncThunk(
 
 export const updateProfile = createAsyncThunk(
   "user/update",
-  async (user, thunkAPI) => {
-    const state = thunkAPI.getState() as RootState;
+  async (user: User, thunkAPI) => {
+    const state = thunkAPI.getState() as RootState; // Especificando o tipo de estado como RootState
     const token = state.auth?.user?.token ?? "";
 
     const data = await userService.updateProfile(user, token);
@@ -72,6 +72,7 @@ export const userSlice = createSlice({
         state.error = false;
       })
       .addCase(updateProfile.fulfilled, (state, action) => {
+        console.log(state, action);
         state.loading = false;
         state.sucess = true;
         state.error = false;
@@ -79,9 +80,10 @@ export const userSlice = createSlice({
         state.message = "Usuário atualizado com sucesso!";
       })
       .addCase(updateProfile.rejected, (state, action) => {
+        console.log(state, action);
         state.loading = false;
         state.error = action.payload as string;
-        state.user = null;
+        state.user = {} as User;
       });
   },
 });
