@@ -18,13 +18,13 @@ import { Button } from "@/components/ui/button";
 const formSchema = z.object({
   name: z.string(),
   email: z.string(),
-  profileImage: z.string(),
+  profileImage: z.string().optional(),
   bio: z.string(),
   password: z.string(),
 });
 
 import { useEffect } from "react";
-import { UseSelector, useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { profile, resetMessage, updateProfile } from "@/slices/userSlice";
 import { RootState } from "@/store";
@@ -35,6 +35,7 @@ import { upload } from "@/utils/config";
 const EditProfile = () => {
   const dispatch = useDispatch();
   const [previewImage, setPreviewImage] = useState();
+  const [profileImage, setProfileImage] = useState();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -79,6 +80,10 @@ const EditProfile = () => {
       data.password = values.password;
     }
 
+    if (profileImage) {
+      data.profileImage = profileImage;
+    }
+
     const formData = new FormData();
 
     for (const key in data) {
@@ -97,6 +102,7 @@ const EditProfile = () => {
     const image = e.target.files[0];
 
     setPreviewImage(image);
+    setProfileImage(image);
   };
 
   return (
@@ -118,7 +124,7 @@ const EditProfile = () => {
             sizes="lg"
             alt="User Icon"
           />
-          {/* <AvatarFallback>{user?.name.charAt(0).toUpperCase()}</AvatarFallback> */}
+          <AvatarFallback>{user?.name.charAt(0).toUpperCase()}</AvatarFallback>
         </Avatar>
       )}
       <Form {...form}>
