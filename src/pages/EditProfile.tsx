@@ -24,7 +24,7 @@ const formSchema = z.object({
 });
 import { useDispatch, useSelector } from "react-redux";
 
-import { profile, resetMessage, updateProfile } from "@/slices/userSlice";
+import { profile, updateProfile } from "@/slices/userSlice";
 import { RootState } from "@/store";
 import { UnknownAction } from "@reduxjs/toolkit";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -168,7 +168,6 @@ const EditProfile = () => {
             name="profileImage"
             render={({ field }) => (
               <FormItem>
-                ''
                 <FormLabel>
                   Imagem de Perfil{" "}
                   <span className="text-sm text-gray-500">(PNG ou JPG)</span>

@@ -29,6 +29,9 @@ const Profile = () => {
 
   const { user, loading } = useSelector((state: RootState) => state.user);
   const { user: userAuth } = useSelector((state: RootState) => state.auth);
+  const { photos, loading: loadingPhotos } = useSelector(
+    (state: RootState) => state.photo
+  );
 
   useEffect(() => {
     dispatch(getUserDetails(id ?? "") as unknown as UnknownAction);
