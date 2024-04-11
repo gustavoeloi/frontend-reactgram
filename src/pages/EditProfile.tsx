@@ -168,6 +168,7 @@ const EditProfile = () => {
             name="profileImage"
             render={({ field }) => (
               <FormItem>
+                ''
                 <FormLabel>
                   Imagem de Perfil{" "}
                   <span className="text-sm text-gray-500">(PNG ou JPG)</span>

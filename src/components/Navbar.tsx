@@ -40,15 +40,12 @@ const Navbar = () => {
       <nav className="flex justify-between px-8 items-center py-6">
         <div className="flex items-center gap-8">
           <div className="flex items-center gap-4">
-            {auth ? (
-              <Link to={`/users/${user?._id}`} className="cursor-pointer">
-                <Menu
-                  size={32}
-                  className="cursor-pointer lg:hidden"
-                  onClick={() => setIsMenuOpen(true)}
-                />
-              </Link>
-            ) : null}
+            <Menu
+              size={32}
+              className="cursor-pointer lg:hidden"
+              onClick={() => setIsMenuOpen(true)}
+            />
+
             <Link to="/" className="font-mono  text-2xl md:text-4xl">
               ReactGram
             </Link>
