@@ -1,12 +1,11 @@
-import { Link, NavLink } from "react-router-dom";
-import { Menu, User, Search, X } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Menu, Search, X } from "lucide-react";
 import { clsx } from "clsx";
 
 //hooks
 import { useAuth } from "@/hooks/useAuth";
 import { useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import NavbarProfile from "./NavbarProfile";
 
@@ -16,8 +15,6 @@ const Navbar = () => {
 
   const { auth } = useAuth();
   const { user } = useSelector((state: RootState) => state.auth);
-
-  console.log(user);
 
   const links = [];
 

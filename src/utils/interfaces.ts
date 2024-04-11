@@ -4,6 +4,7 @@ export interface RegisterData {
   password: string;
   confirmpassword: string;
   token?: string | null;
+  profileImage?: string;
   _id?: string;
 }
 

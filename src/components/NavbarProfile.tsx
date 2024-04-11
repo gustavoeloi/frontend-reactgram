@@ -9,6 +9,8 @@ import {
   DropdownMenuShortcut,
 } from "./ui/dropdown-menu";
 
+import { useSelector } from "react-redux";
+
 import { LogOut, User, PenLine } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -16,17 +18,8 @@ import { useNavigate } from "react-router-dom";
 import { logout, reset } from "@/slices/authSlice";
 import { useDispatch } from "react-redux";
 import { UnknownAction } from "@reduxjs/toolkit";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "./ui/alert-dialog";
+import { RootState } from "@/store";
+import { upload } from "@/utils/config";
 
 const NavbarProfile = () => {
   const navigate = useNavigate();
@@ -40,10 +33,20 @@ const NavbarProfile = () => {
     navigate("/login");
   };
 
+  const { user } = useSelector((state: RootState) => state.auth);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <User size={32} />
+        {user?.profileImage ? (
+          <img
+            src={`${upload}/users/${user?.profileImage}`}
+            alt={user.name}
+            className="rounded-full h-10 w-10"
+          />
+        ) : (
+          <User size={32} />
+        )}
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
         <DropdownMenuLabel>Configurações</DropdownMenuLabel>

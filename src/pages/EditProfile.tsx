@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,8 +22,6 @@ const formSchema = z.object({
   bio: z.string(),
   password: z.string(),
 });
-
-import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { profile, resetMessage, updateProfile } from "@/slices/userSlice";
@@ -112,6 +110,11 @@ const EditProfile = () => {
         Deixe seu perfil mais completo e adicione uma imagem e uma biografia
       </p>
 
+      {!user?.profileImage && !previewImage && (
+        <Avatar className="h-32 w-32 mx-auto mt-8">
+          <AvatarFallback>Sem foto</AvatarFallback>
+        </Avatar>
+      )}
       {(user?.profileImage || previewImage) && (
         <Avatar className="h-32 w-32 mx-auto mt-8">
           <AvatarImage
@@ -124,7 +127,6 @@ const EditProfile = () => {
             sizes="lg"
             alt="User Icon"
           />
-          <AvatarFallback>{user?.name.charAt(0).toUpperCase()}</AvatarFallback>
         </Avatar>
       )}
       <Form {...form}>
