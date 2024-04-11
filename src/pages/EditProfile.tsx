@@ -89,10 +89,6 @@ const EditProfile = () => {
     }
 
     await dispatch(updateProfile(formData) as unknown as UnknownAction);
-
-    setTimeout(() => {
-      dispatch(resetMessage());
-    }, 2000);
   }
 
   const handleFile = (e) => {

@@ -54,7 +54,7 @@ const NavbarProfile = () => {
         <DropdownMenuGroup>
           <DropdownMenuItem
             className="cursor-pointer"
-            onClick={() => navigate("/users/")}
+            onClick={() => navigate(`/users/${user?._id}`)}
           >
             Ver perfil
           </DropdownMenuItem>
