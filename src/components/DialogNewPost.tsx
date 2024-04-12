@@ -14,10 +14,10 @@ import { Textarea } from "./ui/textarea";
 
 import { useForm } from "react-hook-form";
 
-import { publishPhoto } from "@/slices/photoSlice";
+import { publishPhoto, resetMessage } from "@/slices/photoSlice";
 import { RootState } from "@/store";
 import { useDispatch, useSelector } from "react-redux";
-import { LegacyRef, useState } from "react";
+import { photoUpload } from "@/utils/interfaces";
 
 const DialogNewPost = () => {
   const dispatch = useDispatch();
@@ -30,19 +30,30 @@ const DialogNewPost = () => {
 
   const handleFile = (e: any) => {
     const file = e.target.files[0];
-    setValue("photo", file);
+    setValue("image", file);
   };
 
-  const onSubmit = (data: any) => {
-    console.log(data);
+  const onSubmit = (data) => {
+    const formData = new FormData();
+
+    formData.append("title", data.title);
+    formData.append("description", data.description);
+    formData.append("image", data.image);
+
+    dispatch(publishPhoto(formData));
+
+    setValue("title", "");
+    setValue("description", "");
+
+    setTimeout(() => {
+      dispatch(resetMessage());
+    }, 3000);
   };
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>
-          <Plus size={24} />
-        </Button>
+        <Button variant={"outline"}>Novo post</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
@@ -78,7 +89,18 @@ const DialogNewPost = () => {
                 className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </label>
-            <Button type="submit">Publicar</Button>
+            {!loading && <Button type="submit">Postar</Button>}
+            {loading && (
+              <Button type="submit" disabled>
+                Enviando
+              </Button>
+            )}
+            {error && (
+              <p className="text-red-500 text-sm text-center">{error}</p>
+            )}
+            {message && (
+              <p className="text-green-500 text-sm text-center">{message}</p>
+            )}
           </form>
         </div>
       </DialogContent>
