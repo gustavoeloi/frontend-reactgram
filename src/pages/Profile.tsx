@@ -11,7 +11,7 @@ import { upload } from "@/utils/config";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-import { UserCog, Plus } from "lucide-react";
+import { Cog, Eye } from "lucide-react";
 
 import {
   Tooltip,
@@ -19,22 +19,24 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Button } from "@/components/ui/button";
 import DialogNewPost from "@/components/DialogNewPost";
 
+import { getUserPhotos } from "@/slices/photoSlice";
+
 const Profile = () => {
-  const { id } = useParams();
+  const { id } = useParams() as { id: string };
 
   const dispatch = useDispatch();
 
   const { user, loading } = useSelector((state: RootState) => state.user);
   const { user: userAuth } = useSelector((state: RootState) => state.auth);
-  const { photos, loading: loadingPhotos } = useSelector(
+  const { photos, loading: loadingPhoto } = useSelector(
     (state: RootState) => state.photo
   );
 
   useEffect(() => {
-    dispatch(getUserDetails(id ?? "") as unknown as UnknownAction);
+    dispatch(getUserDetails(id) as unknown as UnknownAction);
+    dispatch(getUserPhotos(id) as unknown as UnknownAction);
   }, [dispatch, id]);
 
   if (loading) return <div>Loading... </div>;
@@ -62,7 +64,7 @@ const Profile = () => {
                 <Tooltip>
                   <TooltipTrigger>
                     <Link to="/profile">
-                      <UserCog
+                      <Cog
                         className="ml-2 text-gray-600 border rounded p-1 hover:bg-gray-200 cursor-pointer"
                         size={32}
                       />
@@ -94,9 +96,27 @@ const Profile = () => {
           {userAuth?._id === user?._id && <DialogNewPost />}
         </div>
         <div className="grid grid-cols-3 gap-4">
-          <div className="bg-gray-100 h-24"></div>
-          <div className="bg-gray-100 h-24"></div>
-          <div className="bg-gray-100 h-24"></div>
+          {photos?.map((photo) => (
+            <div key={photo._id} className="relative cursor-pointer">
+              {photo.image && (
+                <img
+                  src={`${upload}/photos/${photo.image}`}
+                  alt={photo.title}
+                  className="w-full h-48 object-cover"
+                />
+              )}
+              <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 hover:opacity-100">
+                <Link to={`/photo/${photo._id}`} className="text-white">
+                  <Eye size={32} />
+                </Link>
+              </div>
+            </div>
+          ))}{" "}
+          {!loadingPhoto && photos.length === 0 && (
+            <div className="text-center text-slate-500 col-span-3 mt-4">
+              Você ainda não tem nenhum post, crie um agora mesmo!
+            </div>
+          )}
         </div>
       </div>
     </div>

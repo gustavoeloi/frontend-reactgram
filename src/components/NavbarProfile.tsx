@@ -11,7 +11,7 @@ import {
 
 import { useSelector } from "react-redux";
 
-import { LogOut, User, PenLine } from "lucide-react";
+import { LogOut, User, PenLine, Settings2, UserRound } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 //Redux
@@ -57,9 +57,15 @@ const NavbarProfile = () => {
             onClick={() => navigate(`/users/${user?._id}`)}
           >
             Ver perfil
+            <DropdownMenuShortcut>
+              <UserRound size={20} />
+            </DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuItem className="cursor-pointer">
-            Fazer Post
+            Gerenciar Posts
+            <DropdownMenuShortcut>
+              <Settings2 size={20} />
+            </DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuItem
             className="cursor-pointer"
