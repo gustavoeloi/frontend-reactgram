@@ -18,6 +18,7 @@ import { publishPhoto, resetMessage } from "@/slices/photoSlice";
 import { RootState } from "@/store";
 import { useDispatch, useSelector } from "react-redux";
 import { photoUpload } from "@/utils/interfaces";
+import { Label } from "./ui/label";
 
 const DialogNewPost = () => {
   const dispatch = useDispatch();
@@ -67,39 +68,45 @@ const DialogNewPost = () => {
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col space-y-4 w-full"
           >
-            <label className="mb-2 text-gray-700 text-sm ">
-              <input
+            <Label className="mb-2 text-gray-500 text-sm ">
+              Título do post
+              <Input
                 type="text"
                 {...register("title")}
                 placeholder="Digite o título do seu post"
-                className=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
-            </label>
-            <label className="mb-2 text-gray-700 text-sm ">
-              <textarea
+            </Label>
+            <Label className="mb-2 text-gray-500 text-sm ">
+              Descrição do post
+              <Textarea
                 {...register("description")}
                 placeholder="Digite a descrição do seu post"
-                className=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-20"
               />
-            </label>
-            <label className="mb-2 text-gray-700 text-sm ">
-              <input
-                type="file"
-                onChange={handleFile}
-                className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              />
-            </label>
-            {!loading && <Button type="submit">Postar</Button>}
-            {loading && (
-              <Button type="submit" disabled>
-                Enviando
-              </Button>
-            )}
+            </Label>
+            <Label className="mb-2 text-gray-500 text-sm">
+              Imagem do post
+              <Input type="file" onChange={handleFile} />
+            </Label>
             {error && (
-              <p className="text-red-500 text-sm text-center">{error}</p>
+              <p className="py-2 px-1 rounded bg-red-100 border border-red-200 text-red-500 font-medium text-center">
+                {error}
+              </p>
             )}
+
             {message && (
-              <p className="text-green-500 text-sm text-center">{message}</p>
+              <p className="py-2 px-1 rounded bg-green-100 border border-green-400 text-green-500 font-medium text-center">
+                {message}
+              </p>
+            )}
+
+            {!loading ? (
+              <Button type="submit" className="mt-8">
+                Postar
+              </Button>
+            ) : (
+              <Button type="submit" className="mt-8" disabled>
+                Postando...
+              </Button>
             )}
           </form>
         </div>
